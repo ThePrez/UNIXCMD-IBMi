@@ -1,0 +1,206 @@
+:pnlgrp.
+.************************************************************************
+.*  Help for command OPNPIPE
+.************************************************************************
+:help name='OPNPIPE'.
+Open Pipe & Run Unix Cmd - Help
+:p.The Open Pipe & Run Unix Cmd (OPNPIPE) command starts a
+process in either the QShell or PASE environment (from here forward,
+referred to as "Unix" process) and connects that Unix process
+to your CL program using pipes.
+.*
+:p.A pipe is an interprocess communication tool. Think of it the
+way you'd think of a data queue. Or in a more abstract sense,
+the way you'd think of a water pipe. Any data written to the pipe
+on one end of the connection will be received on the other end
+of the connection (and vice versa.) This is analogous to the way
+water poured into one end of a pipe will come out the other end.
+.*
+:p.Once the process is started and connected using the OPNPIPE
+command, you'll be able to write data to the pipe using the Send
+to Pipe (SNDPIPE) command. To receive responses from the Unix
+process, use the Receive from Pipe (RCVPIPE) command. To stop
+the Unix process, close the pipes, and check whether the command
+succeeded, use the Close Pipe (CLOPIPE) command.
+.*
+:p.:hp2.Restrictions::ehp2.
+:ul.
+:li.
+You must have *X authority to each directory in the path name
+that precedes the Unix command you are to run.
+:li.
+If the command is a compiled executable, you must have *X authority
+to that executable.
+:li.
+If the command is a shell script, you must have *RX authority
+to the shell script.
+:li.
+The command that you're running may impose additional restrictions
+on whether you can run it.
+:li.
+Adopted authority is not usually supported in the IFS.  Since Unix
+tools typically use the IFS, you will not be able to gain the above
+authorities by adopting them.
+:eul.
+:ehelp.
+.*******************************************
+.*   Help for parameter CMD
+.*******************************************
+:help name='OPNPIPE/CMD'.
+Command to run (CMD) - Help
+:xh3.Command to run (CMD)
+:p.Specifies the QShell or PASE command line that you'd like to run.
+This command is invoked by the QShell command interpreter, or the
+PASE /QOpenSys/usr/bin/sh shell.
+:p.Since the command is run by the shell, you can use redirection,
+pipelines, environment variables, and so forth as you would normally
+use when running a command in a Unix shell. (Such as when running
+the command interactively.)
+.* Describe the function provided by the parameter.
+:p.This is a required parameter.
+:parml.
+:pt.:pv.character-value:epv.
+:pd.
+Specify the command to run.
+:eparml.
+:ehelp.
+.*******************************************
+.*   Help for parameter TYPE
+.*******************************************
+:help name='OPNPIPE/TYPE'.
+Command environment (TYPE) - Help
+:xh3.Command environment (TYPE)
+:p.Specifies the environment in which to invoke the command.
+:parml.
+:pt.:pk def.*QSHELL:epk.
+:pd.
+The command will be interpreted and run by the QShell interpreter.
+This is equivalent to running your command with the STRQSH tool,
+except that it will be connected to your CL program with a pipe.
+.*
+:pt.:pk.*PASE:epk.
+:pd.
+The command will be interpreted and run by the /QOpenSys/usr/bin/sh
+program provided by the PASE environment. This is equivalent to
+calling the QP2SHELL API and specifying /QOpenSys/usr/bin/sh as the
+first parameter, except that the process will be connected to your
+CL program with a pipe.
+:eparml.
+:ehelp.
+.*******************************************
+.*   Help for parameter PIPEID
+.*******************************************
+:help name='OPNPIPE/PIPEID'.
+CL VAR for Pipe ID (PIPEID) - Help
+:xh3.CL VAR for Pipe ID (PIPEID)
+:p.(Optional) This allows you to specify a variable that will
+receive a Pipe ID. The Pipe ID is useful when you wish to have
+more than one Unix process running simultaneously. Each time
+you open a new pipe, a PipeID will be assigned.  You can use the
+PipeID to tell the SNDPIPE, RCVPIPE or CLOPIPE commands which
+pipe to operate on.
+:parml.
+:pt.:pv.decimal-number:epv.
+:pd.
+Specify the CL variable that will receive the Pipe ID.  If you
+do not use Pipe IDs, the SNDPIPE, RCVPIPE and CLOPIPE commands
+will always act on the most recently opened pipe.
+:eparml.
+:ehelp.
+.**************************************************
+.*
+.* Examples for OPNPIPE
+.*
+.**************************************************
+:help name='OPNPIPE/COMMAND/EXAMPLES'.
+Examples for OPNPIPE - Help
+:xh3.Examples for OPNPIPE
+:p.:hp2.Example 1: Simple Command Example:ehp2.
+:xmp.
+OPNPIPE CMD('cd /tmp && ls')
+RCVPIPE RCD(&FILENAME) EOF(&EOF)
+DOWHILE (&EOF *EQ '0')
+   /* Do processing on &FILENAME */
+   RCVPIPE RCD(&FILENAME) EOF(&EOF)
+ENDDO
+CLOPIPE
+:exmp.
+:p.This example invokes the QShell 'cd' command to switch to the
+/tmp IFS directory. It then proceeds to run the QShell 'ls' command
+to get a list of files in that directory. The Unix process that
+runs these commands is connected to the CL program with a pipe.
+:p.When you receive data from the Unix process using the RCVPIPE
+command, it reads one line of the output of the 'ls' command
+into the &FILENAME variable. You can use this to get a list of
+files in the /tmp IFS directory.
+.*
+:p.:hp2.Example 2: More Complex Command Example:ehp2.
+:xmp.
+OPNPIPE CMD('cd /tmp && ls old*.dat') PIPEID(&LSPIPE)
+RCVPIPE RCD(&FILENAME) EOF(&EOF) PIPEID(&LSPIPE)
+DOWHILE (&EOF *EQ '0')
+   OPNPIPE CMD('cd /tmp && rm' *BCAT &FILENAME) PIPEID(&RMPIPE)
+   CLOPIPE PIPEID(&RMPIPE)
+   RCVPIPE RCD(&FILENAME) EOF(&EOF) PIPEID(&LSPIPE)
+ENDDO
+CLOPIPE PIPEID(&LSPIPE)
+:exmp.
+:p.This command starts a QShell process that reads the name of
+the files in the /tmp directory of the IFS, just as the previous
+example did, except that it only reads files that match a
+wildcard pattern of old*.dat.
+:p.For each filename that matches that pattern, it starts a new ,
+pipe (therefore having two simultaneous invocations of QShell) and
+uses that new process to delete the file with the 'rm' (remove)
+QShell command.
+.*
+:p.:hp2.Example 3: Invoking a command via PASE:ehp2.
+:xmp.
+OPNPIPE CMD('ssh example.com cd /tmp "&&" ls new*') +
+        TYPE(*PASE)
+RCVPIPE RCD(&FILENAME) EOF(&EOF)
+DOWHILE (&EOF *EQ '0')
+   /* Process filename */
+   RCVPIPE RCD(&FILENAME) EOF(&EOF)
+ENDDO
+CLOPIPE
+:exmp.
+:p.This example uses the *PASE environment instead of QShell.
+It runs the 'ssh' command (provided with IBM licpgm 57xx-SC1) to
+connect to a separate computer named example.com.  On that computer,
+it runs the 'ls' command to list files that match a pattern
+of new*.
+:p.The remote computer returns the file names to the pipe, and they
+are read into your CL program using the RCVPIPE command.
+:ehelp.
+.**************************************************
+.*
+.* Error messages for OPNPIPE
+.*
+.**************************************************
+:help name='OPNPIPE/ERROR/MESSAGES'.
+&msg(CPX0005,QCPFMSG). OPNPIPE - Help
+:xh3.&msg(CPX0005,QCPFMSG). OPNPIPE
+:p.:hp3.*ESCAPE &msg(CPX0006,QCPFMSG).:ehp3.
+.************************************************************************
+.* List the *ESCAPE, *STATUS, and *NOTIFY messages signalled from the command.
+.* The following are generic messages defined in message file QCPFMSG.
+.* Modify this list to match the list of error messages for the command.
+.************************************************************************
+:DL COMPACT.
+:DT.CPE3401
+:DD.&MSG(CPE3401,QCPFMSG,*LIBL,nosub).
+:DT.CPE3014
+:DD.&MSG(CPE3014,QCPFMSG,*LIBL,nosub).
+:DT.CPE3453
+:DD.&MSG(CPE3453,QCPFMSG,*LIBL,nosub).
+:DT.CPE3489
+:DD.&MSG(CPE3489,QCPFMSG,*LIBL,nosub).
+:DT.CPF9897
+:DD.Temporarily, CPF9897 is used to report most messages from
+the OPNPIPE command. In a future release of UNIXCMD these
+CPF9897 messages will be replaced with messages from a UNIXCMD
+message file.
+:EDL.
+:ehelp.
+:epnlgrp.

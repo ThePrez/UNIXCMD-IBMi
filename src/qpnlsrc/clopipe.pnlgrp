@@ -1,0 +1,92 @@
+:pnlgrp.
+.************************************************************************
+.*  Help for command CLOPIPE
+.************************************************************************
+:help name='CLOPIPE'.
+Close Pipe to Unix Cmd - Help
+:p.The Close Pipe to Unix Cmd (CLOPIPE) command stops a QShell/PASE
+process that was opened with the OPNPIPE command, and closes up
+the pipes that were connected to it.
+:p.When the QShell/PASE process is stopped, the CLOPIPE command
+checks to see if the command exited normally or abnormally. If it
+ended abnormally, CLOPIPE reports that error to it's caller.
+.*
+:p.:hp2.Restrictions::ehp2.
+:ul.
+:li.
+You must previously open a pipe with the OPNPIPE command
+before you run this.
+:li.
+See the help for the OPNPIPE command for information about
+the authorities needed to use this suite of tools.
+:eul.
+:ehelp.
+.*******************************************
+.*   Help for parameter PIPEID
+.*******************************************
+:help name='CLOPIPE/PIPEID'.
+Pipe ID to close (PIPEID) - Help
+:xh3.Pipe ID to close (PIPEID)
+:p.Tells the CLOPIPE command which pipe to close. This is
+particularly useful if you have more than one pipe open
+simultaneously.
+:parml.
+:pt.:pk def.*DFT:epk.
+:pd.
+The default pipe is closed. The default pipe is the one opened
+most recently by the OPNPIPE command.
+:pt.:pv.decimal-number:epv.
+:pd.
+Specify the Pipe ID of an open pipe as returned from the OPNPIPE
+command.
+:eparml.
+:ehelp.
+.**************************************************
+.*
+.* Examples for CLOPIPE
+.*
+.**************************************************
+:help name='CLOPIPE/COMMAND/EXAMPLES'.
+Examples for CLOPIPE - Help
+:xh3.Examples for CLOPIPE
+:p.:hp2.Example 1: Simple Command Example:ehp2.
+:xmp.
+CLOPIPE
+:exmp.
+:p.The most recently opened pipe is closed.
+.*
+:p.:hp2.Example 2: More Complex Command Example:ehp2.
+:xmp.
+OPNPIPE CMD('ls -l') PIPEID(&MYPIPE)
+/* do other stuff here */
+CLOPIPE PIPEID(&MYPIPE)
+:exmp.
+:p.The OPNPIPE command runs the Unix 'ls -l' command in
+a background process connected to a pipe. OPNPIPE sets the &MYPIPE
+variable to contain an ID number that identifies the open pipe.
+:p.The CLOPIPE command closes the pipe identified by the &MYPIPE
+variable that was returned from OPNPIPE.
+:ehelp.
+.**************************************************
+.*
+.* Error messages for CLOPIPE
+.*
+.**************************************************
+:help name='CLOPIPE/ERROR/MESSAGES'.
+&msg(CPX0005,QCPFMSG). CLOPIPE - Help
+:xh3.&msg(CPX0005,QCPFMSG). CLOPIPE
+:p.:hp3.*ESCAPE &msg(CPX0006,QCPFMSG).:ehp3.
+.************************************************************************
+.* List the *ESCAPE, *STATUS, and *NOTIFY messages signalled from the command.
+.* The following are generic messages defined in message file QCPFMSG.
+.* Modify this list to match the list of error messages for the command.
+.************************************************************************
+:DL COMPACT.
+:DT.CPF9897
+:DD.Temporarily, CPF9897 is used to report most messages from
+the CLOPIPE command. In a future release of UNIXCMD these
+CPF9897 messages will be replaced with messages from a UNIXCMD
+message file.
+:EDL.
+:ehelp.
+:epnlgrp.
