@@ -1,0 +1,29 @@
+title: UNIXCMD for IBM i
+description: >-
+  Run QShell and PASE commands from RPG and CL, and exchange data with them
+  through their standard input and output streams.
+
+remote_theme: just-the-docs/just-the-docs@v0.12.0
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: false
+
+search_enabled: true
+heading_anchors: true
+
+aux_links:
+  "UNIXCMD on GitHub":
+    - "https://github.com/ThePrez/UNIXCMD-IBMi"
+aux_links_new_tab: true
+
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: >-
+  UNIXCMD is Copyright &copy; 2009-2016 Scott C. Klement and is distributed
+  under a BSD-style license.
