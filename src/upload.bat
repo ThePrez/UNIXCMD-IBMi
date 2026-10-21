@@ -1,4 +1,5 @@
 @echo off
+pushd "%~dp0"
 set FTPSCRIPT=genzippkg.fts
 set HOST=%1
 set LIB=%2
@@ -48,37 +49,37 @@ echo ascii >> %FTPSCRIPT%
 echo put qrpglesrc/clopiper4.rpgle %LIB%/QRPGLESRC.CLOPIPER4 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(CLOPIPER4) srctype(RPGLE) text('CL CLOPIPE command CPP') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example1.rpgle %LIB%/QRPGLESRC.EXAMPLE1 >> %FTPSCRIPT%
+echo put ../samples/rpg/example1.rpgle %LIB%/QRPGLESRC.EXAMPLE1 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE1) srctype(RPGLE) text('Basic LS example') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example10.rpgle %LIB%/QRPGLESRC.EXAMPLE10 >> %FTPSCRIPT%
+echo put ../samples/rpg/example10.rpgle %LIB%/QRPGLESRC.EXAMPLE10 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE10) srctype(RPGLE) text('') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example11.rpgle %LIB%/QRPGLESRC.EXAMPLE11 >> %FTPSCRIPT%
+echo put ../samples/rpg/example11.rpgle %LIB%/QRPGLESRC.EXAMPLE11 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE11) srctype(RPGLE) text('') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example2.rpgle %LIB%/QRPGLESRC.EXAMPLE2 >> %FTPSCRIPT%
+echo put ../samples/rpg/example2.rpgle %LIB%/QRPGLESRC.EXAMPLE2 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE2) srctype(RPGLE) text('Basic Write to IFS example') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example3.rpgle %LIB%/QRPGLESRC.EXAMPLE3 >> %FTPSCRIPT%
+echo put ../samples/rpg/example3.rpgle %LIB%/QRPGLESRC.EXAMPLE3 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE3) srctype(RPGLE) text('Basic Convert ASCII Example') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example4.rpgle %LIB%/QRPGLESRC.EXAMPLE4 >> %FTPSCRIPT%
+echo put ../samples/rpg/example4.rpgle %LIB%/QRPGLESRC.EXAMPLE4 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE4) srctype(RPGLE) text('DS I/O Example') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example5.rpgle %LIB%/QRPGLESRC.EXAMPLE5 >> %FTPSCRIPT%
+echo put ../samples/rpg/example5.rpgle %LIB%/QRPGLESRC.EXAMPLE5 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE5) srctype(RPGLE) text('DS I/O With PASE Cmd') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example6.rpgle %LIB%/QRPGLESRC.EXAMPLE6 >> %FTPSCRIPT%
+echo put ../samples/rpg/example6.rpgle %LIB%/QRPGLESRC.EXAMPLE6 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE6) srctype(RPGLE) text('SSH remote command example') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example7.rpgle %LIB%/QRPGLESRC.EXAMPLE7 >> %FTPSCRIPT%
+echo put ../samples/rpg/example7.rpgle %LIB%/QRPGLESRC.EXAMPLE7 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE7) srctype(RPGLE) text('PHP Integration Example') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example8.rpgle %LIB%/QRPGLESRC.EXAMPLE8 >> %FTPSCRIPT%
+echo put ../samples/rpg/example8.rpgle %LIB%/QRPGLESRC.EXAMPLE8 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE8) srctype(RPGLE) text('Example of SPECIAL file in free format') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
-echo put qrpglesrc/example9.rpgle %LIB%/QRPGLESRC.EXAMPLE9 >> %FTPSCRIPT%
+echo put ../samples/rpg/example9.rpgle %LIB%/QRPGLESRC.EXAMPLE9 >> %FTPSCRIPT%
 echo quote rcmd chgpfm file(%LIB%/QRPGLESRC) mbr(EXAMPLE9) srctype(RPGLE) text('') >> %FTPSCRIPT%
 echo ascii >> %FTPSCRIPT%
 echo put qrpglesrc/ifsio_h.rpgle %LIB%/QRPGLESRC.IFSIO_H >> %FTPSCRIPT%
@@ -116,7 +117,7 @@ del %FTPSCRIPT%
 goto end
 :usage
 echo.
-echo USAGE: ftpsrc HOST LIB USERID PASSWORD
+echo USAGE: upload HOST LIB USERID PASSWORD
 echo.
 echo      HOST = FTP server to send to (ex: as400.example.com)
 echo       LIB = IBM i library to put source code into (ex: QGPL)
@@ -124,3 +125,4 @@ echo    USERID = UserID to log in with
 echo  PASSWORD = Password to log in with
 echo.
 :end
+popd
