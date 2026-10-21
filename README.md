@@ -30,15 +30,17 @@ samples/
 
 ## Documentation
 
-Full documentation lives in the [docs](docs/) directory, which is published
-with GitHub Pages. It covers concepts, the Open Access and SPECIAL file
+**<https://theprez.github.io/UNIXCMD-IBMi/>**
+
+The documentation covers concepts, the Open Access and SPECIAL file
 interfaces, the CL commands, the `UNIXPIPER4` API, data handling, the
-samples, and troubleshooting.
+samples, and troubleshooting. Its source is in the [docs](docs/) directory.
 
 ## Installation
 
 See [INSTALLATION.md](INSTALLATION.md) for upload and build instructions,
-or the [installation guide](docs/installation.md) in the docs.
+or the [installation guide](https://theprez.github.io/UNIXCMD-IBMi/installation.html)
+in the documentation.
 
 ## License
 
